@@ -52,7 +52,9 @@ jobs:
           git config --global user.name "GitHub Actions"
           git config --global user.email "actions@github.com"
           git add deployment.yaml
-          git commit -m "Update image to ${{ github.sha }}"
-          
-          # Push
-          git push -f https://${GIT_TOKEN}@github.com/Sabeel28x/grade-api-gitops.git main
+          if git diff --cached --quiet; then
+          echo "No changes detected. Image already up to date."
+          else
+          git commit -m "Update image to ${GITHUB_SHA}"
+          git push https://${GIT_TOKEN}@github.com/Sabeel28x/grade-api-gitops.git main
+          fi
